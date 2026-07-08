@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edital Verticalizado — TCE/MA 2026 — Auditor: Engenharia (Cargo 13)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1A2E52;
+    --navy-deep:#122140;
+    --navy-line:#2C4470;
+    --gold:#E8A020;
+    --orange:#E85D04;
+    --paper:#F6F4EE;
+    --card:#FFFFFF;
+    --ink:#1C2434;
+    --ink-soft:#5A6377;
+    --line:#E2DFD6;
+    --green:#1E8A5A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Barlow',sans-serif;
+    font-size:15px;
+    line-height:1.45;
+  }
+  /* ---------- Cabeçalho blueprint ---------- */
+  header{
+    background:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px),
+      var(--navy);
+    background-size:16px 16px,16px 16px,80px 80px,80px 80px;
+    color:#fff;
+    padding:28px 20px 22px;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:6px;
+  }
+  h1{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;font-size:clamp(28px,5vw,44px);
+    line-height:1.02;text-transform:uppercase;letter-spacing:.01em;
+  }
+  h1 .sub{color:var(--gold)}
+  .brand{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+    color:rgba(255,255,255,.55);margin-top:8px;
+  }
+  /* legenda de prancha (title block) */
+  .titleblock{
+    margin-top:20px;
+    border:1.5px solid rgba(255,255,255,.55);
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    background:var(--navy-deep);
+  }
+  .tb-cell{
+    border:.75px solid rgba(255,255,255,.28);
+    padding:9px 12px 10px;
+    background:var(--navy-deep);
+  }
+  .tb-cell .k{
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);
+    margin-bottom:3px;
+  }
+  .tb-cell .v{
+    font-family:'Barlow Condensed',sans-serif;font-weight:600;
+    font-size:19px;line-height:1.1;
+  }
+  .tb-cell .v small{font-size:13px;font-weight:500;color:rgba(255,255,255,.75)}
+  .tb-cell .v.gold{color:var(--gold)}
+  .tb-cell .v.orange{color:#FF8B3D}
+  /* ---------- Painel de progresso ---------- */
+  .dash{
+    max-width:960px;margin:-1px auto 0;padding:0 20px;
+  }
+  .dash-inner{
+    background:var(--navy-deep);
+    border:1.5px solid var(--navy-line);
+    border-top:none;
+    color:#fff;
+    padding:16px 18px 18px;
+    display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;
+  }
+  .meter{flex:1 1 240px;min-width:220px}
+  .meter .lab{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+    letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);
+    margin-bottom:5px;
+  }
+  .meter .lab b{font-size:15px;color:#fff;letter-spacing:0}
+  .bar{height:9px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0%;border-radius:99px;transition:width .35s ease}
+  .bar.gold>i{background:var(--gold)}
+  .bar.orange>i{background:var(--orange)}
+  .countdown{
+    font-family:'IBM Plex Mono',monospace;text-align:center;
+    padding:6px 14px;border:1px dashed rgba(255,255,255,.4);
+  }
+  .countdown .n{font-size:26px;font-weight:600;color:var(--gold);line-height:1}
+  .countdown .t{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-top:3px}
+  /* ---------- Controles ---------- */
+  .controls{
+    max-width:960px;margin:18px auto 6px;padding:0 20px;
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  }
+  .chip{
+    font-family:'Barlow',sans-serif;font-weight:600;font-size:13px;
+    padding:6px 14px;border-radius:99px;border:1.5px solid var(--navy);
+    background:transparent;color:var(--navy);cursor:pointer;
+  }
+  .chip.active{background:var(--navy);color:#fff}
+  .controls .spacer{flex:1}
+  .ghost{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    background:none;border:none;color:var(--ink-soft);cursor:pointer;
+    text-decoration:underline;text-underline-offset:3px;
+  }
+  .savenote{
+    max-width:960px;margin:0 auto;padding:0 20px 4px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);
+  }
+  /* ---------- Blocos e seções ---------- */
+  main{max-width:960px;margin:0 auto 70px;padding:0 20px}
+  .block-title{
+    display:flex;align-items:center;gap:12px;
+    margin:28px 0 12px;
+  }
+  .block-title h2{
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;
+    font-size:22px;text-transform:uppercase;letter-spacing:.03em;color:var(--navy);
+    white-space:nowrap;
+  }
+  .block-title .rule{flex:1;height:1.5px;background:var(--navy);opacity:.25}
+  .block-title .badge{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+    padding:3px 9px;border-radius:3px;white-space:nowrap;
+  }
+  .badge.p1{background:#E7ECF5;color:var(--navy)}
+  .badge.p2{background:var(--orange);color:#fff}
+  section.subject{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--navy);
+    border-radius:6px;
+    margin-bottom:12px;
+    overflow:hidden;
+  }
+  section.subject.spec{border-left-color:var(--orange)}
+  .subj-head{
+    width:100%;display:flex;align-items:center;gap:12px;
+    padding:13px 16px;background:none;border:none;cursor:pointer;text-align:left;
+  }
+  .subj-head:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+  .subj-name{
+    flex:1;font-family:'Barlow Condensed',sans-serif;font-weight:600;
+    font-size:18.5px;color:var(--ink);line-height:1.15;
+  }
+  .subj-count{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .mini-bars{width:92px;flex:none}
+  .mini-bars .bar{height:5px;margin:3px 0;background:#EDEAE1}
+  .caret{
+    flex:none;width:10px;height:10px;border-right:2px solid var(--ink-soft);
+    border-bottom:2px solid var(--ink-soft);transform:rotate(45deg);
+    transition:transform .2s;margin-top:-4px;
+  }
+  section.subject.open .caret{transform:rotate(-135deg);margin-top:4px}
+  .topics{display:none;border-top:1px solid var(--line)}
+  section.subject.open .topics{display:block}
+  .col-head{
+    display:flex;align-items:center;gap:0;
+    padding:6px 16px;background:#FAF8F2;border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-soft);
+  }
+  .col-head .spacer{flex:1}
+  .col-head span{width:62px;text-align:center;flex:none}
+  .topic{
+    display:flex;align-items:center;gap:0;
+    padding:9px 16px;border-bottom:1px solid #F0EDE4;
+  }
+  .topic:last-child{border-bottom:none}
+  .topic.done-both{background:#F4FBF5}
+  .topic .num{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);
+    width:38px;flex:none;
+  }
+  .topic .txt{flex:1;padding-right:12px;font-size:14.5px}
+  .topic.done-both .txt{color:#4E5A50}
+  .ckwrap{width:62px;flex:none;display:flex;justify-content:center}
+  .ck{
+    appearance:none;-webkit-appearance:none;
+    width:21px;height:21px;border-radius:5px;cursor:pointer;
+    border:2px solid #B9B4A6;background:#fff;position:relative;flex:none;
+  }
+  .ck:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+  .ck:checked::after{
+    content:"";position:absolute;left:5.5px;top:2px;width:5px;height:10px;
+    border-right:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(45deg);
+  }
+  .ck.est:checked{background:var(--gold);border-color:var(--gold)}
+  /* contador de revisões */
+  .revcount{
+    appearance:none;-webkit-appearance:none;
+    width:21px;height:21px;border-radius:5px;cursor:pointer;flex:none;
+    border:2px solid #B9B4A6;background:#fff;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;
+    color:var(--ink-soft);line-height:1;padding:0;
+    display:flex;align-items:center;justify-content:center;
+    user-select:none;transition:background .12s,border-color .12s;
+  }
+  .revcount:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+  .revcount.has{background:var(--orange);border-color:var(--orange);color:#fff}
+  .revcount .minus{
+    position:absolute;font-size:0;
+  }
+  .revhint{
+    font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink-soft);
+    text-align:center;line-height:1;margin-top:2px;letter-spacing:.02em;
+  }
+  .empty-msg{
+    padding:14px 16px;font-family:'IBM Plex Mono',monospace;font-size:12px;
+    color:var(--ink-soft);
+  }
+  /* ---------- Regras do jogo ---------- */
+  .rules{
+    background:var(--card);border:1px solid var(--line);border-radius:6px;
+    padding:16px 18px;margin-top:26px;
+  }
+  .rules h3{
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:19px;
+    text-transform:uppercase;color:var(--navy);margin-bottom:8px;
+  }
+  .rules p{font-size:14px;color:var(--ink);margin-bottom:7px}
+  .rules p b{color:var(--navy)}
+  .rules .olho{
+    margin-top:10px;padding:10px 12px;border-left:4px solid var(--orange);
+    background:#FFF4EA;font-size:14px;
+  }
+  footer{
+    max-width:960px;margin:30px auto 40px;padding:0 20px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-soft);
+  }
+  @media (max-width:560px){
+    .topic .txt{font-size:13.5px}
+    .ckwrap,.col-head span{width:48px}
+    .mini-bars{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .bar>i,.caret{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Edital nº 1 – TCE/MA · 6/7/2026 · Cebraspe</div>
+    <h1>Edital Verticalizado<br><span class="sub">Auditor de Controle Externo — Engenharia</span></h1>
+    <div class="brand">CARGO 13 · TCE/MA 2026 · @concurseironalabuta_</div>
+
+    <div class="titleblock" role="table" aria-label="Dados do cargo">
+      <div class="tb-cell"><div class="k">Remuneração</div><div class="v gold">R$ 20.112,20</div></div>
+      <div class="tb-cell"><div class="k">Vagas</div><div class="v">3 <small>(2 AC + 1 PP)</small></div></div>
+      <div class="tb-cell"><div class="k">Jornada</div><div class="v">30h <small>semanais</small></div></div>
+      <div class="tb-cell"><div class="k">Taxa</div><div class="v">R$ 300,00</div></div>
+      <div class="tb-cell"><div class="k">Inscrições</div><div class="v">17/7 a 21/8</div></div>
+      <div class="tb-cell"><div class="k">Prova</div><div class="v orange">29/11/2026</div></div>
+      <div class="tb-cell"><div class="k">Objetivas (P1+P2)</div><div class="v">160 pts <small>· corte 64</small></div></div>
+      <div class="tb-cell"><div class="k">Discursiva (P3)</div><div class="v">40 pts <small>· mín. 20</small></div></div>
+      <div class="tb-cell"><div class="k">Corrigem discursiva</div><div class="v">50 AC <small>+ 10 PcD + 25 PP</small></div></div>
+      <div class="tb-cell"><div class="k">Requisito</div><div class="v"><small>Eng. Civil + CREA</small></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="dash">
+  <div class="dash-inner">
+    <div class="meter">
+      <div class="lab"><span>Estudado</span><b id="pctEst">0%</b></div>
+      <div class="bar gold"><i id="barEst"></i></div>
+    </div>
+    <div class="meter">
+      <div class="lab"><span>Tópicos revisados</span><b id="pctRev">0%</b></div>
+      <div class="bar orange"><i id="barRev"></i></div>
+    </div>
+    <div class="countdown">
+      <div class="n" id="days">—</div>
+      <div class="t">dias até a prova</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="chip active" data-filter="all">Todos</button>
+  <button class="chip" data-filter="pending">Não estudados</button>
+  <button class="chip" data-filter="toreview">Estudados sem revisão</button>
+  <span class="spacer"></span>
+  <button class="ghost" id="expandAll">expandir tudo</button>
+  <button class="ghost" id="collapseAll">recolher tudo</button>
+  <button class="ghost" id="resetBtn">zerar progresso</button>
+</div>
+<div class="savenote">No contador de revisões: clique para <b>+1</b>; clique com o botão direito (ou Alt+clique) para <b>−1</b>.</div>
+<div class="savenote" id="saveNote">Progresso salvo automaticamente.</div>
+
+<main id="main"></main>
+
+<footer>
+  Fonte: Edital nº 1 – TCE/MA, de 6/7/2026 (Diário Oficial Eletrônico TCE/MA nº 3045/2026, item 14 — objetos de avaliação do Cargo 13). Cronograma sujeito a alteração por edital.
+</footer>
+
+<script>
+const SECTIONS = [
+// ===================== P1 — CONHECIMENTOS GERAIS (1,00 pt/questão) =====================
+{block:"p1", id:"lp", name:"Língua Portuguesa", topics:[
+ ["1","Compreensão e interpretação de textos de gêneros variados"],
+ ["2","Reconhecimento de tipos e gêneros textuais"],
+ ["3","Domínio da ortografia oficial"],
+ ["4.1","Coesão textual: referenciação, substituição, repetição, conectores e sequenciação"],
+ ["4.2","Emprego de tempos e modos verbais"],
+ ["5.1","Emprego das classes de palavras"],
+ ["5.2","Relações de coordenação entre orações e termos"],
+ ["5.3","Relações de subordinação entre orações e termos"],
+ ["5.4","Emprego dos sinais de pontuação"],
+ ["5.5","Concordância verbal e nominal"],
+ ["5.6","Regência verbal e nominal"],
+ ["5.7","Emprego do sinal indicativo de crase"],
+ ["5.8","Colocação dos pronomes átonos"],
+ ["6.1","Reescrita: significação das palavras"],
+ ["6.2","Reescrita: substituição de palavras ou trechos"],
+ ["6.3","Reescrita: reorganização de orações e períodos"],
+ ["6.4","Reescrita de textos de diferentes gêneros e níveis de formalidade"]
+]},
+{block:"p1", id:"info", name:"Competências Digitais e Informática Aplicada ao Setor Público", topics:[
+ ["1.1","Cultura, cidadania e letramento digital e midiático (BNCC e Lei nº 14.533/2023)"],
+ ["1.2","Pensamento computacional: análise crítica de informações, ética no uso de dados e combate à desinformação"],
+ ["2.1","Microsoft Windows: conceitos, interface, arquivos, pastas e programas"],
+ ["2.2","Microsoft Office: textos, planilhas (fórmulas e funções), gráficos e apresentações"],
+ ["2.3","Redes: LAN, WAN, Internet; protocolos TCP/IP, HTTP, SMTP, FTP; interoperabilidade"],
+ ["2.4","Correio eletrônico, Teams, Google Meet e trabalho remoto"],
+ ["3.1","Segurança da informação: backup, vírus/worms/pragas, antivírus, firewall, anti-spyware, phishing e pharming"],
+ ["3.2","LGPD (Lei nº 13.709/2018): conceitos, direitos dos titulares e aplicação no setor público"],
+ ["3.3","Armazenamento em nuvem (OneDrive, Google Drive)"],
+ ["3.4","Assinatura digital em processos administrativos"],
+ ["3.5","Marco Civil da Internet (Lei nº 12.965/2014)"],
+ ["4.1","Governo digital: plataforma Gov.br (login único, carteira digital, serviços)"],
+ ["4.2","Portal Nacional de Dados Abertos"],
+ ["4.3","Transparência e acesso à informação (Lei nº 12.527/2011 – LAI)"],
+ ["4.4","PEN, SEI, assinatura eletrônica e certificação digital"],
+ ["4.5","Tecnologias emergentes: IA generativa, chatbots, big data, IoT em cidades inteligentes"],
+ ["4.6","Ética e responsabilidade digital: fake news, inclusão digital e acessibilidade"]
+]},
+{block:"p1", id:"rlm", name:"Raciocínio Lógico", topics:[
+ ["1","Estruturas lógicas"],
+ ["2","Lógica de argumentação: analogias, inferências, deduções e conclusões"],
+ ["3.1","Proposições simples e compostas"],
+ ["3.2","Tabelas-verdade"],
+ ["3.3","Equivalências lógicas"],
+ ["3.4","Leis de De Morgan"],
+ ["3.5","Diagramas lógicos"],
+ ["4","Lógica de primeira ordem"],
+ ["5","Princípios de contagem e probabilidade"],
+ ["6","Operações com conjuntos"],
+ ["7","Problemas aritméticos, geométricos e matriciais"]
+]},
+{block:"p1", id:"dadm", name:"Direito Administrativo", topics:[
+ ["1.1","Centralização, descentralização, concentração e desconcentração"],
+ ["1.2","Administração direta e indireta"],
+ ["1.3","Autarquias, fundações, empresas públicas e sociedades de economia mista"],
+ ["2","Ato administrativo: conceito, requisitos, atributos, classificação e espécies"],
+ ["3","Agentes públicos: disposições constitucionais; conceito, espécies; cargo, emprego e função"],
+ ["4","Poderes administrativos: hierárquico, disciplinar, regulamentar e de polícia; uso e abuso do poder"],
+ ["5.1","Licitação: princípios"],
+ ["5.2","Contratação direta: dispensa e inexigibilidade"],
+ ["5.3","Licitação: modalidades, tipos e procedimento"],
+ ["5.4","Lei nº 14.133/2021 e alterações; Decreto nº 11.462/2023"],
+ ["6","Controle da administração: administrativo, judicial e legislativo"],
+ ["7","Responsabilidade civil do Estado: ato comissivo, omissão, requisitos, excludentes e atenuantes"],
+ ["8.1","Contratos administrativos: Lei nº 14.133/2021; consórcios públicos (Lei nº 11.107/2005 e Decreto nº 6.017/2007)"],
+ ["8.2","Contratos: características, vigência, alterações, execução, inexecução, rescisão; convênios"],
+ ["9","Desapropriação: conceito, requisitos, indenização, desapropriação indireta e por zona"],
+ ["10","Súmulas e jurisprudência vinculante do STF e do STJ"],
+ ["11","LAI (Lei nº 12.527/2011) e LGPD (Lei nº 13.709/2018)"]
+]},
+{block:"p1", id:"dconst", name:"Direito Constitucional", topics:[
+ ["1","CF/88: princípios fundamentais"],
+ ["2","Aplicabilidade das normas constitucionais: eficácia plena, contida e limitada; normas programáticas"],
+ ["3","Direitos e garantias fundamentais: individuais e coletivos, sociais, nacionalidade, políticos, partidos"],
+ ["4","Organização político-administrativa: União, estados, DF, municípios e territórios"],
+ ["5","Administração pública na CF/88: disposições gerais e servidores públicos"],
+ ["6","Poder Executivo: atribuições e responsabilidades do presidente"],
+ ["7.1","Poder Legislativo: estrutura, funcionamento e atribuições; processo legislativo"],
+ ["7.2","Fiscalização contábil, financeira e orçamentária; CPIs"],
+ ["8","Poder Judiciário: órgãos, organização e competências; CNJ"],
+ ["9","Funções essenciais à justiça: MP, Advocacia Pública e Defensoria"],
+ ["10","Constituição do Estado do Maranhão"]
+]},
+{block:"p1", id:"cext", name:"Controle Externo", topics:[
+ ["1","Conceito, tipos e formas de controle"],
+ ["2","Controle interno e externo"],
+ ["3","Controle parlamentar"],
+ ["4","Controle pelos tribunais de contas"],
+ ["5","Controle administrativo"],
+ ["6","Lei nº 8.429/1992 (Improbidade Administrativa)"],
+ ["7","Sistemas de controle jurisdicional: contencioso administrativo e jurisdição una"],
+ ["8","Controle jurisdicional da administração pública no direito brasileiro"],
+ ["9","Controle da atividade financeira do Estado: espécies e sistemas"],
+ ["10","TCU, tribunais de contas dos estados e do DF"],
+ ["11","TCE/MA na Constituição do Estado do Maranhão"]
+]},
+{block:"p1", id:"leg", name:"Legislação Específica (TCE/MA)", topics:[
+ ["1","Regimento Interno do TCE/MA"],
+ ["2","Lei nº 8.258/2005 (Lei Orgânica do TCE/MA)"],
+ ["3","Lei nº 9.936/2013 (Organização administrativa)"],
+ ["4","IN nº 50/2017 e suas alterações"],
+ ["5","IN nº 82/2025"]
+]},
+{block:"p1", id:"hgma", name:"História e Geografia do Estado do Maranhão", topics:[
+ ["H1","França Equinocial: expedição de Daniel de La Touche; fundação de São Luís; Batalha de Guaxenduba"],
+ ["H2","Invasão e expulsão dos holandeses"],
+ ["H3","Estado do Maranhão e Grão-Pará; Revolta de Bequimão (causas e objetivos); Companhia de Comércio"],
+ ["H4","Período do Império: adesão do Maranhão; Independência; Batalha do Jenipapo"],
+ ["H5","A Balaiada: caracterização e causas"],
+ ["H6","Período Republicano: adesão à República; Revolução de 1930 no Maranhão"],
+ ["H7","Vitorinismo e Greve de 1951"],
+ ["H8","Fatos políticos, econômicos e sociais da 2ª metade do século XX"],
+ ["G1","Localização: superfície, limites, fronteiras e pontos extremos"],
+ ["G2","APAs e parques nacionais"],
+ ["G3","Clima (pluviosidade e temperatura); geomorfologia; geologia e recursos minerais"],
+ ["G4","Relevo: planaltos, planícies e baixadas"],
+ ["G5","Rios: bacias limítrofes (Parnaíba, Gurupi, Tocantins-Araguaia) e genuinamente maranhenses"],
+ ["G6","Formações vegetais: floresta, cerrado e cocais"],
+ ["G7","População: povoamento, urbanização, densidade e movimentos populacionais"],
+ ["G8","Agricultura e pecuária"],
+ ["G9","Extrativismo vegetal, animal e mineral"],
+ ["G10","Parque industrial: indústrias de base e de transformação"],
+ ["G11","Setor terciário; malha viária; portos e aeroportos"],
+ ["G12","Cultura maranhense"]
+]},
+{block:"p1", id:"dh", name:"Noções de Direitos Humanos", topics:[
+ ["1","Teoria geral dos direitos fundamentais"],
+ ["2","Direitos humanos e direitos fundamentais"],
+ ["3","Declaração Universal dos Direitos Humanos"],
+ ["4","Agenda 2030 da ONU"],
+ ["5","Estatuto da Pessoa com Deficiência (Lei nº 13.146/2015)"],
+ ["6","Acessibilidade (Lei nº 10.098/2000)"],
+ ["7","Prioridade de atendimento (Lei nº 10.048/2000)"],
+ ["8","Estatuto da Igualdade Racial (Lei nº 12.288/2010)"]
+]},
+// ===================== P2 — CONHECIMENTOS ESPECÍFICOS (2,00 pts/questão) =====================
+{block:"p2", id:"obplan", name:"Obras — Planejamento, Normas, Fiscalização e Legislação", topics:[
+ ["1","Planejamento de projetos e obras: programação e controle"],
+ ["2","Viabilidade e controle técnico, físico-financeiro e econômico; normas técnicas"],
+ ["3","Documentação técnica: editais, contratos, aditivos, cadernos de encargos, projetos, diário de obras"],
+ ["4.1","Compatibilização de projetos de edificações: arquitetônicos, complementares e especiais"],
+ ["4.2","Compatibilização de projetos rodoviários: sondagem, terraplenagem, pavimentação, drenagem, sinalização, OAE"],
+ ["4.3","Compatibilização de projetos hídricos: água, esgoto, operação e manutenção"],
+ ["5","Segurança e higiene do trabalho"],
+ ["6","Fiscalização: ensaios de recebimento; medições, reajustamento, mudança de data-base, faturas; diários, ARTs; recebimento provisório e definitivo"],
+ ["7","Iluminação pública"],
+ ["8","Energias renováveis"],
+ ["9","Sustentabilidade"],
+ ["10","Cidades inteligentes"],
+ ["11","Custos: quantitativos; orçamento analítico e sintético; composições; cronograma físico-financeiro; BDI; encargos sociais"],
+ ["12.1","Licitação de obras: conceito, princípios, obrigatoriedade; dispensa, inexigibilidade e vedação"],
+ ["12.2","Licitação de obras: modalidades, procedimentos, revogação/anulação, homologação e adjudicação"],
+ ["12.3","Acervo técnico; anteprojeto, projeto básico e projeto executivo"],
+ ["13","Contratos de obras públicas: requisitos, formalização, execução, controle, inexecução, revisão e rescisão"],
+ ["14","Legislação ambiental: Lei nº 15.190/2025; Lei nº 9.605/1998 (crimes ambientais)"],
+ ["15","Lei nº 14.133/2021; Lei nº 8.987/1995 (concessões); Lei nº 11.079/2004 (PPPs)"]
+]},
+{block:"p2", id:"obedif", name:"Obras de Edificações", topics:[
+ ["1","Projetos e especificações de materiais e serviços"],
+ ["2","Programação de obras"],
+ ["3","Acompanhamento de obras: apropriação de serviços"],
+ ["4.1","Canteiro de obras; fundações diretas e indiretas"],
+ ["4.2","Alvenaria; concreto; estruturas de concreto armado e protendido; estruturas metálicas"],
+ ["4.3","Impermeabilização; cobertura; esquadrias; pisos; revestimentos; pinturas"],
+ ["4.4","Instalações: elétrica, hidrossanitária, prevenção a incêndio"],
+ ["5","Fiscalização: medições, reajustamento, data-base, faturas; documentação técnica"],
+ ["6","Controle de qualidade de materiais (cimento, agregados, aditivos, concreto usinado, aço, madeira, cerâmicos, vidro) e da execução"],
+ ["8","SINAPI: conceitos básicos e aplicação"],
+ ["9","Engenharia de avaliações (NBR 14.653): conceitos, metodologia, graus de fundamentação"],
+ ["10","Gestão na produção de edificações: projeto, materiais, execução, uso e manutenção"]
+]},
+{block:"p2", id:"obhid", name:"Obras Hídricas", topics:[
+ ["1","Estruturas hidráulicas: barragens, soleiras, extravasores, tomadas d'água, canais, condutos, túneis, bueiros; pré-dimensionamento"],
+ ["2","Aproveitamento hidrelétrico: potencial, estruturas, turbinas e geradores; comparação com térmica, eólica, nuclear e biomassa"],
+ ["3","Irrigação e drenagem: conceito, condicionantes de projeto, operação e manutenção de perímetro"],
+ ["4.1","Abastecimento de água: captação, adução, ETA, recalque, reservação, distribuição"],
+ ["4.2","Coleta e tratamento de esgoto (ETE); lagoas de estabilização; fossas sépticas"],
+ ["4.3","Defesa contra inundação e macrodrenagem: reservatórios de cheias, canalização, reflorestamento de bacia"]
+]},
+{block:"p2", id:"obrod", name:"Obras Rodoviárias", topics:[
+ ["1","Estudos geotécnicos: análise de relatório de sondagens"],
+ ["2","Especificações de materiais: características físicas"],
+ ["3","Ensaios de solo, de materiais betuminosos e de agregados"],
+ ["4.1","Terraplenagem: cortes, aterros, bota-fora"],
+ ["4.2","Pavimentação: reforço de subleito, sub-base, base e revestimento asfáltico"],
+ ["4.3","Drenagem e obras de arte especiais; principais equipamentos"],
+ ["5","Análise orçamentária: SICRO (metodologia, produtividade, equipamentos)"],
+ ["6","Acompanhamento de obras: apropriação de serviços"],
+ ["7","Construção: canteiro; execução de terraplenagem, pavimentação, drenagem e sinalização"],
+ ["8","Impactos ambientais e medidas mitigadoras"],
+ ["9","Fiscalização: medições, reajustamento, data-base, faturas; documentação técnica"],
+ ["10","Controle de materiais (cimento, agregados, aditivos, betuminosos) e de execução"]
+]},
+{block:"p2", id:"aud", name:"Auditoria do Setor Público", topics:[
+ ["1","Fundamentos: conceito, finalidade, objetivo, abrangência; auditoria interna x externa"],
+ ["2","Instrumentos de fiscalização: auditoria, levantamento, monitoramento, acompanhamento e inspeção"],
+ ["3","Tipos de auditoria: conformidade, operacional e financeira"],
+ ["4","Normas: ISSAIs 100, 200, 300 e 400 (INTOSAI); NBASP"],
+ ["5.1","Planejamento: determinação de escopo"],
+ ["5.2","Materialidade, risco e relevância; amostragem estatística"],
+ ["5.3","Matriz de planejamento"],
+ ["6.1","Execução: programas de auditoria e papéis de trabalho"],
+ ["6.2","Testes, técnicas e procedimentos: exame documental, inspeção física, circularização, conciliações, revisão analítica"],
+ ["7","Evidências; caracterização de achados; matriz de achados e matriz de responsabilização"],
+ ["8","Comunicação dos resultados: relatórios de auditoria"],
+ ["9","Monitoramento"]
+]}
+];
+
+const SUPA_URL  = "https://fkwrmffxxjzulfybvlsb.supabase.co";
+const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrd3JtZmZ4eGp6dWxmeWJ2bHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1MzY1NjMsImV4cCI6MjA5OTExMjU2M30.Plx5Ujso683Sjn-lD78M5OtT7xzuI7FTa6_THNl3WuM";
+const LS_UID    = "tcema26_cargo13_userid";
+const LS_DATA   = "tcema26_cargo13_data";
+const PROVA     = new Date(2026, 10, 29);
+let state  = {};
+let filter = "all";
+
+function getUserId(){
+  let id = localStorage.getItem(LS_UID);
+  if(!id){ id = crypto.randomUUID(); localStorage.setItem(LS_UID, id); }
+  return id;
+}
+
+async function supaGet(uid){
+  const r = await fetch(`${SUPA_URL}/rest/v1/progresso?user_id=eq.${encodeURIComponent(uid)}&select=data`, {
+    headers:{ "apikey": SUPA_ANON, "Authorization": "Bearer " + SUPA_ANON }
+  });
+  if(!r.ok) throw new Error("get " + r.status);
+  const rows = await r.json();
+  return rows.length ? rows[0].data : null;
+}
+
+async function supaSet(uid, data){
+  const r = await fetch(`${SUPA_URL}/rest/v1/progresso`, {
+    method: "POST",
+    headers:{
+      "apikey": SUPA_ANON,
+      "Authorization": "Bearer " + SUPA_ANON,
+      "Content-Type": "application/json",
+      "Prefer": "resolution=merge-duplicates"
+    },
+    body: JSON.stringify({ user_id: uid, data: data, updated_at: new Date().toISOString() })
+  });
+  if(!r.ok) throw new Error("set " + r.status);
+}
+
+async function supaDel(uid){
+  await fetch(`${SUPA_URL}/rest/v1/progresso?user_id=eq.${encodeURIComponent(uid)}`, {
+    method: "DELETE",
+    headers:{ "apikey": SUPA_ANON, "Authorization": "Bearer " + SUPA_ANON }
+  });
+}
+
+async function loadState(){
+  const uid = getUserId();
+  try{
+    const remote = await supaGet(uid);
+    if(remote){ state = remote; localStorage.setItem(LS_DATA, JSON.stringify(state)); return; }
+  }catch(e){ console.warn("Supabase offline, carregando local", e); }
+  try{ const v = localStorage.getItem(LS_DATA); if(v) state = JSON.parse(v)||{}; }catch(e){}
+}
+
+let saveTimer = null;
+function saveState(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async ()=>{
+    const uid = getUserId();
+    try{ localStorage.setItem(LS_DATA, JSON.stringify(state)); }catch(e){}
+    try{
+      await supaSet(uid, state);
+      setNote("✓ Progresso salvo e sincronizado.");
+    }catch(e){
+      setNote("⚠ Salvo localmente (sem conexão com o servidor).");
+    }
+  }, 400);
+}
+function setNote(msg){ document.getElementById("saveNote").textContent = msg; }
+
+function build(){
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  const blocks = [
+    {key:"p1", title:"Prova Objetiva P1 — Conhecimentos Gerais", badge:"40 questões · 1,00 pt cada", cls:"p1"},
+    {key:"p2", title:"Prova Objetiva P2 — Conhecimentos Específicos", badge:"60 questões · 2,00 pts cada", cls:"p2"}
+  ];
+  blocks.forEach(b=>{
+    const bt = document.createElement("div");
+    bt.className = "block-title";
+    bt.innerHTML = `<h2>${b.title}</h2><div class="rule"></div><span class="badge ${b.cls}">${b.badge}</span>`;
+    main.appendChild(bt);
+
+    SECTIONS.filter(s=>s.block===b.key).forEach(sec=>{
+      const el = document.createElement("section");
+      el.className = "subject" + (b.key==="p2" ? " spec" : "");
+      el.dataset.sec = sec.id;
+
+      const rows = sec.topics.map(t=>{
+        const k = topicKey(sec,t);
+        return `<div class="topic" data-key="${k}">
+          <span class="num">${t[0]}</span>
+          <span class="txt">${t[1]}</span>
+          <span class="ckwrap"><input type="checkbox" class="ck est" data-key="${k}" data-kind="e" aria-label="Estudado: ${t[1]}"></span>
+          <span class="ckwrap"><button type="button" class="revcount" data-key="${k}" aria-label="Revisões de: ${t[1]}. Clique para somar, clique com o botão direito ou segure para reduzir.">0</button></span>
+        </div>`;
+      }).join("");
+
+      el.innerHTML = `
+        <button class="subj-head" aria-expanded="false">
+          <span class="subj-name">${sec.name}</span>
+          <span class="mini-bars">
+            <span class="bar gold"><i class="mb-est"></i></span>
+            <span class="bar orange"><i class="mb-rev"></i></span>
+          </span>
+          <span class="subj-count"></span>
+          <span class="caret" aria-hidden="true"></span>
+        </button>
+        <div class="topics">
+          <div class="col-head"><span style="width:38px"></span><span class="spacer"></span><span>Estudei</span><span>Revisões</span></div>
+          ${rows}
+          <div class="empty-msg" hidden>Nenhum tópico neste filtro. 👊</div>
+        </div>`;
+      main.appendChild(el);
+    });
+  });
+
+  // regras da prova
+  const rules = document.createElement("div");
+  rules.className = "rules";
+  rules.innerHTML = `
+    <h3>Regras que decidem sua aprovação (Cargo 13)</h3>
+    <p><b>Objetivas:</b> 100 questões de múltipla escolha (A–E). P1 = 40 × 1,00 pt; P2 = 60 × 2,00 pts. Total 160 pts; <b>eliminado quem fizer menos de 64,00</b>. Não há desconto por erro, mas questão em branco ou com dupla marcação vale 0.</p>
+    <p><b>Funil da discursiva:</b> só têm a discursiva corrigida os <b>50 primeiros da AC</b> (+ 10 PcD + 25 PP), respeitados empates. Estar acima do corte não basta — precisa estar entre os primeiros.</p>
+    <p><b>Discursiva (mesmo dia, tarde, 4h):</b> peça técnica de até 60 linhas (20 pts) + 2 questões de até 30 linhas (10 pts cada). Fórmulas: NP = NC − 4×NE÷TL e NQ = NC − 2×NE÷TL. <b>Mínimo: 20,00 pts.</b></p>
+    <p><b>Desempate relevante:</b> maior nota em P2 (específicos) vem antes de P1 — mais um motivo para o peso 2× dominar seu ciclo.</p>
+    <div class="olho"><b>Olho vivo:</b> o item 13.32 permite cobrar alterações legislativas em vigor até 6/7/2026 mesmo fora da lista; jurisprudência dos tribunais superiores pode ser cobrada se publicada até 30 dias antes da prova. E a base cobrada em obras inclui normas específicas citadas (SINAPI, SICRO, NBR 14.653, Lei 15.190/2025) — estude pela norma, não só pelo resumo.</div>`;
+  main.appendChild(rules);
+}
+
+function refresh(){
+  let totE=0, totR=0, tot=0, totRevSum=0;
+  document.querySelectorAll("section.subject").forEach(el=>{
+    const sec = SECTIONS.find(s=>s.id===el.dataset.sec);
+    let e=0,r=0, revsum=0, visible=0;
+    el.querySelectorAll(".topic").forEach(row=>{
+      const k = row.dataset.key;
+      const st = state[k] || {};
+      const rc = st.r || 0;
+      const ckE = row.querySelector(".ck.est");
+      const btnR = row.querySelector(".revcount");
+      ckE.checked = !!st.e;
+      btnR.textContent = rc;
+      btnR.classList.toggle("has", rc>0);
+      row.classList.toggle("done-both", !!st.e && rc>0);
+      let show = true;
+      if(filter==="pending") show = !st.e;
+      if(filter==="toreview") show = !!st.e && rc===0;
+      row.style.display = show ? "" : "none";
+      if(show) visible++;
+      if(st.e) e++;
+      if(rc>0) r++;
+      revsum += rc;
+    });
+    el.querySelector(".empty-msg").hidden = visible>0;
+    const n = sec.topics.length;
+    totE+=e; totR+=r; tot+=n; totRevSum += revsum;
+    el.querySelector(".subj-count").textContent = `${e}/${n} · ${r}/${n}` + (revsum>0 ? ` · ${revsum} rev` : "");
+    el.querySelector(".mb-est").style.width = (e/n*100)+"%";
+    el.querySelector(".mb-rev").style.width = (r/n*100)+"%";
+  });
+  const pe = Math.round(totE/tot*100), pr = Math.round(totR/tot*100);
+  document.getElementById("pctEst").textContent = pe+"%";
+  document.getElementById("pctRev").textContent = pr+"% · " + totRevSum + " rev";
+  document.getElementById("barEst").style.width = pe+"%";
+  document.getElementById("barRev").style.width = pr+"%";
+}
+
+function wire(){
+  function cleanup(k){
+    if(state[k] && !state[k].e && !(state[k].r>0)) delete state[k];
+  }
+  function bump(k, delta){
+    state[k] = state[k] || {};
+    const cur = state[k].r || 0;
+    const next = Math.max(0, cur + delta);
+    state[k].r = next;
+    if(next>0) state[k].e = 1; // revisar implica estudado
+    cleanup(k);
+    saveState();
+    refresh();
+  }
+  // checkbox de estudado
+  document.getElementById("main").addEventListener("change", ev=>{
+    const ck = ev.target.closest(".ck.est");
+    if(!ck) return;
+    const k = ck.dataset.key;
+    state[k] = state[k] || {};
+    state[k].e = ck.checked ? 1 : 0;
+    cleanup(k);
+    saveState();
+    refresh();
+  });
+  // contador de revisões: clique soma, botão direito / com Alt subtrai
+  document.getElementById("main").addEventListener("click", ev=>{
+    const btn = ev.target.closest(".revcount");
+    if(!btn) return;
+    bump(btn.dataset.key, ev.altKey ? -1 : 1);
+  });
+  document.getElementById("main").addEventListener("contextmenu", ev=>{
+    const btn = ev.target.closest(".revcount");
+    if(!btn) return;
+    ev.preventDefault();
+    bump(btn.dataset.key, -1);
+  });
+  // acessibilidade: setas ajustam o contador
+  document.getElementById("main").addEventListener("keydown", ev=>{
+    const btn = ev.target.closest(".revcount");
+    if(!btn) return;
+    if(ev.key==="ArrowUp" || ev.key==="+"){ ev.preventDefault(); bump(btn.dataset.key, 1); }
+    if(ev.key==="ArrowDown" || ev.key==="-"){ ev.preventDefault(); bump(btn.dataset.key, -1); }
+  });
+  document.getElementById("main").addEventListener("click", ev=>{
+    const head = ev.target.closest(".subj-head");
+    if(!head) return;
+    const sec = head.closest("section.subject");
+    const open = sec.classList.toggle("open");
+    head.setAttribute("aria-expanded", open ? "true":"false");
+  });
+  document.querySelectorAll(".chip").forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+      ch.classList.add("active");
+      filter = ch.dataset.filter;
+      if(filter!=="all"){
+        document.querySelectorAll("section.subject").forEach(s=>s.classList.add("open"));
+      }
+      refresh();
+    });
+  });
+  document.getElementById("expandAll").addEventListener("click", ()=>{
+    document.querySelectorAll("section.subject").forEach(s=>s.classList.add("open"));
+  });
+  document.getElementById("collapseAll").addEventListener("click", ()=>{
+    document.querySelectorAll("section.subject").forEach(s=>s.classList.remove("open"));
+  });
+  document.getElementById("resetBtn").addEventListener("click", async ()=>{
+    if(!confirm("Zerar todo o progresso de estudo e revisão?")) return;
+    state = {};
+    const uid = getUserId();
+    try{ localStorage.removeItem(LS_DATA); }catch(e){}
+    try{ await supaDel(uid); }catch(e){}
+    refresh();
+    setNote("Progresso zerado.");
+  });
+  // contagem regressiva
+  const days = Math.max(0, Math.ceil((PROVA - new Date())/(1000*60*60*24)));
+  document.getElementById("days").textContent = days;
+}
+
+(async function init(){
+  build();
+  await loadState();
+  wire();
+  refresh();
+})();
+</script>
+</body>
+</html>
