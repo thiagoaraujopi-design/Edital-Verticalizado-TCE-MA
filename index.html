@@ -499,7 +499,7 @@ const SECTIONS = [
  ["10","Gestão na produção de edificações: projeto, materiais, execução, uso e manutenção"]
 ]},
 {block:"p2", id:"obhid", name:"Obras Hídricas", topics:[
- ["1","Estruturas hidráulicas: barragens, soleiras, extravasores, tomadas d'água, canais, condutos, túneis, bueiros; pré-dimensionamento"],
+ ["1","Estruturas hidráulicas: barragens, soleiras, extravasores, tomadas de água, canais, condutos, túneis, bueiros; pré-dimensionamento"],
  ["2","Aproveitamento hidrelétrico: potencial, estruturas, turbinas e geradores; comparação com térmica, eólica, nuclear e biomassa"],
  ["3","Irrigação e drenagem: conceito, condicionantes de projeto, operação e manutenção de perímetro"],
  ["4.1","Abastecimento de água: captação, adução, ETA, recalque, reservação, distribuição"],
@@ -606,6 +606,7 @@ function saveState(){
 function setNote(msg){ document.getElementById("saveNote").textContent = msg; }
 
 function topicKey(sec, t){ return sec.id + ":" + t[0]; }
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 function build(){
   const main = document.getElementById("main");
@@ -627,11 +628,12 @@ function build(){
 
       const rows = sec.topics.map(t=>{
         const k = topicKey(sec,t);
+        const label = esc(t[1]);
         return `<div class="topic" data-key="${k}">
           <span class="num">${t[0]}</span>
-          <span class="txt">${t[1]}</span>
-          <span class="ckwrap"><input type="checkbox" class="ck est" data-key="${k}" data-kind="e" aria-label="Estudado: ${t[1]}"></span>
-          <span class="ckwrap"><button type="button" class="revcount" data-key="${k}" aria-label="Revisões de: ${t[1]}. Clique para somar, clique com o botão direito ou segure para reduzir.">0</button></span>
+          <span class="txt">${label}</span>
+          <span class="ckwrap"><input type="checkbox" class="ck est" data-key="${k}" data-kind="e" aria-label="Estudado: ${label}"></span>
+          <span class="ckwrap"><button type="button" class="revcount" data-key="${k}" aria-label="Revisões: ${label}">0</button></span>
         </div>`;
       }).join("");
 
