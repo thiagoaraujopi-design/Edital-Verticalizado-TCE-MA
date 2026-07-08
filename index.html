@@ -56,6 +56,23 @@
     font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
     color:rgba(255,255,255,.55);margin-top:8px;
   }
+  .btn-resumo {
+    margin-top: 15px;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-resumo:hover {
+    background: var(--gold);
+    color: var(--navy);
+  }
   /* legenda de prancha (title block) */
   .titleblock{
     margin-top:20px;
@@ -83,14 +100,10 @@
   .tb-cell .v.orange{color:#FF8B3D}
   /* ---------- Painel de progresso ---------- */
   .dash{
-    max-width:960px;margin:-1px auto 0;padding:0 20px;
+    width:100%; margin-top:28px;
   }
   .dash-inner{
-    background:var(--navy-deep);
-    border:1.5px solid var(--navy-line);
-    border-top:none;
     color:#fff;
-    padding:16px 18px 18px;
     display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;
   }
   .meter{flex:1 1 240px;min-width:220px}
@@ -161,10 +174,7 @@
 
   /* ---------- Sincronização ---------- */
   .sync-panel {
-    max-width:960px;margin:18px auto 0;padding:16px 18px;
-    background:var(--card);
-    border:1.5px solid var(--line);
-    border-radius:6px;
+    width: 100%;
   }
   .sync-header {
     display:flex;justify-content:space-between;align-items:center;
@@ -173,20 +183,20 @@
   }
   .sync-title {
     font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
-    text-transform:uppercase;color:var(--navy);
+    text-transform:uppercase;color:#fff;
     display:flex;align-items:center;gap:6px;
   }
   .sync-status {
     font-family:'IBM Plex Mono',monospace;font-size:11px;
     padding:3px 8px;border-radius:4px;
-    background:#FFF8E7;color:#B27A00;
+    background:rgba(255,255,255,0.1);color:#fff;
     transition: all 0.3s ease;
   }
   .sync-status.synced {
     background:#EBFDF2;color:#155724;
   }
   .sync-desc {
-    font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;
+    font-size:13.5px;color:rgba(255,255,255,0.7);margin-bottom:14px;
     line-height:1.4;
   }
   .sync-controls {
@@ -198,19 +208,22 @@
     flex:1 1 300px;
   }
   .code-label {
-    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,0.7);
     white-space:nowrap;
   }
   .code-input {
     font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;
-    background:#FAF8F2;border:1.5px solid var(--line);color:var(--navy);
+    background:#111B31;border:1.5px solid var(--navy-line);color:#fff;
     padding:6px 12px;border-radius:4px;width:100%;max-width:320px;
     text-align:center;
   }
   .code-input-edit {
     font-family:'Barlow',sans-serif;font-size:13px;
-    background:#fff;border:1.5px solid var(--navy-line);color:var(--ink);
+    background:#111B31;border:1.5px solid var(--navy-line);color:#fff;
     padding:6px 12px;border-radius:4px;width:100%;max-width:240px;
+  }
+  .code-input-edit::placeholder {
+    color: rgba(255,255,255,0.4);
   }
   .code-input-edit:focus {
     outline:2px solid var(--gold);
@@ -222,18 +235,18 @@
     white-space:nowrap;
   }
   .btn-sync-sec {
-    background:#FAF8F2;color:var(--navy);
-    border:1.5px solid var(--line);
+    background:transparent;color:#fff;
+    border:1.5px solid var(--navy-line);
   }
   .btn-sync-sec:hover {
-    background:#EBE7DC;
+    background:var(--navy-line);
   }
   .btn-sync-primary {
-    background:var(--navy);color:#fff;
-    border:1.5px solid var(--navy);
+    background:var(--orange);color:#fff;
+    border:1.5px solid var(--orange);
   }
   .btn-sync-primary:hover {
-    background:var(--navy-deep);border-color:var(--navy-deep);
+    background:#ff7b24;border-color:#ff7b24;
   }
 
   /* ---------- Modal ---------- */
@@ -348,11 +361,12 @@
   .block-title{
     display:flex;align-items:center;gap:12px;
     margin:28px 0 12px;
+    flex-wrap:wrap;
   }
   .block-title h2{
     font-family:'Barlow Condensed',sans-serif;font-weight:700;
     font-size:22px;text-transform:uppercase;letter-spacing:.03em;color:var(--navy);
-    white-space:nowrap;
+    line-height:1.2;
   }
   .block-title .rule{flex:1;height:1.5px;background:var(--navy);opacity:.25}
   .block-title .badge{
@@ -489,8 +503,9 @@
     <div class="eyebrow">Edital nº 1 – TCE/MA · 6/7/2026 · Cebraspe</div>
     <h1>Edital Verticalizado<br><span class="sub">Auditor de Controle Externo — Engenharia</span></h1>
     <div class="brand">CARGO 13 · TCE/MA 2026 · @concurseironalabuta_</div>
+    <button class="btn-resumo" onclick="toggleResumo()">Resumo do Edital</button>
 
-    <div class="titleblock" role="table" aria-label="Dados do cargo">
+    <div class="titleblock" id="resumoTabela" role="table" aria-label="Dados do cargo" style="display:none;">
       <div class="tb-cell"><div class="k">Remuneração</div><div class="v gold">R$ 20.112,20</div></div>
       <div class="tb-cell"><div class="k">Vagas</div><div class="v">3 <small>(2 AC + 1 PP)</small></div></div>
       <div class="tb-cell"><div class="k">Jornada</div><div class="v">30h <small>semanais</small></div></div>
@@ -503,46 +518,49 @@
       <div class="tb-cell"><div class="k">Requisito</div><div class="v"><small>Eng. Civil + CREA</small></div></div>
     </div>
   </div>
+
+  <div class="wrap" style="margin-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px;">
+    <!-- Painel de Sincronização -->
+    <div class="sync-panel">
+      <div class="sync-header">
+        <span class="sync-title">Sincronização em Nuvem</span>
+        <span class="sync-status" id="syncStatus">Carregando...</span>
+      </div>
+      <div class="sync-body">
+        <p class="sync-desc">Guarde o código abaixo para acessar seu progresso de outros aparelhos, ou digite seu e-mail/código personalizado para carregar e sincronizar seus dados.</p>
+        <div class="sync-controls">
+          <div class="code-box">
+            <span class="code-label">Código Atual:</span>
+            <input type="text" id="syncCodeInput" class="code-input" readonly>
+            <button type="button" class="btn-sync-sec" id="copyCodeBtn" title="Copiar código">Copiar</button>
+          </div>
+          <div class="actions-box">
+            <input type="text" id="loadCodeInput" class="code-input-edit" placeholder="E-mail ou código personalizado">
+            <button type="button" class="btn-sync-primary" id="loadCodeBtn">Sincronizar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel de progresso -->
+    <div class="dash">
+      <div class="dash-inner">
+        <div class="meter">
+          <div class="lab"><span>Estudado</span><b id="pctEst">0%</b></div>
+          <div class="bar gold"><i id="barEst"></i></div>
+        </div>
+        <div class="meter">
+          <div class="lab"><span>Tópicos revisados</span><b id="pctRev">0%</b></div>
+          <div class="bar orange"><i id="barRev"></i></div>
+        </div>
+        <div class="countdown">
+          <div class="n" id="days">—</div>
+          <div class="t">dias até a prova</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
-
-<div class="dash">
-  <div class="dash-inner">
-    <div class="meter">
-      <div class="lab"><span>Estudado</span><b id="pctEst">0%</b></div>
-      <div class="bar gold"><i id="barEst"></i></div>
-    </div>
-    <div class="meter">
-      <div class="lab"><span>Tópicos revisados</span><b id="pctRev">0%</b></div>
-      <div class="bar orange"><i id="barRev"></i></div>
-    </div>
-    <div class="countdown">
-      <div class="n" id="days">—</div>
-      <div class="t">dias até a prova</div>
-    </div>
-  </div>
-</div>
-
-<!-- Painel de Sincronização -->
-<div class="sync-panel">
-  <div class="sync-header">
-    <span class="sync-title">🔄 Sincronização em Nuvem</span>
-    <span class="sync-status" id="syncStatus">Carregando...</span>
-  </div>
-  <div class="sync-body">
-    <p class="sync-desc">Guarde o código abaixo para acessar seu progresso de outros aparelhos, ou digite seu e-mail/código personalizado para carregar e sincronizar seus dados.</p>
-    <div class="sync-controls">
-      <div class="code-box">
-        <span class="code-label">Código Atual:</span>
-        <input type="text" id="syncCodeInput" class="code-input" readonly>
-        <button type="button" class="btn-sync-sec" id="copyCodeBtn" title="Copiar código">Copiar</button>
-      </div>
-      <div class="actions-box">
-        <input type="text" id="loadCodeInput" class="code-input-edit" placeholder="E-mail ou código personalizado">
-        <button type="button" class="btn-sync-primary" id="loadCodeBtn">Sincronizar</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="controls">
     <button class="chip active" onclick="setFilter('all')">Todos</button>
@@ -1227,6 +1245,14 @@ window.toggleAll = function(expand) {
     if(expand) s.classList.add("open");
     else s.classList.remove("open");
   });
+};
+window.toggleResumo = function() {
+  const tb = document.getElementById('resumoTabela');
+  if (tb.style.display === 'none' || tb.style.display === '') {
+    tb.style.display = 'grid';
+  } else {
+    tb.style.display = 'none';
+  }
 };
 
 window.setFilter = function(f) {
