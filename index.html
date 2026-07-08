@@ -605,6 +605,8 @@ function saveState(){
 }
 function setNote(msg){ document.getElementById("saveNote").textContent = msg; }
 
+function topicKey(sec, t){ return sec.id + ":" + t[0]; }
+
 function build(){
   const main = document.getElementById("main");
   main.innerHTML = "";
