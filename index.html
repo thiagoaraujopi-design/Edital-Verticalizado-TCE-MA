@@ -190,6 +190,7 @@
   }
   .col-head .spacer{flex:1}
   .col-head span{width:62px;text-align:center;flex:none}
+  .col-head span.wrev, .ckwrap.wrev{width:82px}
   .topic{
     display:flex;align-items:center;gap:0;
     padding:9px 16px;border-bottom:1px solid #F0EDE4;
@@ -214,25 +215,28 @@
     border-right:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(45deg);
   }
   .ck.est:checked{background:var(--gold);border-color:var(--gold)}
-  /* contador de revisões */
-  .revcount{
-    appearance:none;-webkit-appearance:none;
-    width:21px;height:21px;border-radius:5px;cursor:pointer;flex:none;
-    border:2px solid #B9B4A6;background:#fff;
-    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;
-    color:var(--ink-soft);line-height:1;padding:0;
+  /* stepper de revisões: − n + */
+  .stepper{
+    display:inline-flex;align-items:center;gap:0;
+    border:2px solid #B9B4A6;border-radius:6px;overflow:hidden;background:#fff;
+  }
+  .stepper.has{border-color:var(--orange)}
+  .stepper button{
+    appearance:none;-webkit-appearance:none;border:none;cursor:pointer;
+    width:22px;height:21px;padding:0;line-height:1;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;
+    background:#F1EEE5;color:var(--ink-soft);
     display:flex;align-items:center;justify-content:center;
-    user-select:none;transition:background .12s,border-color .12s;
   }
-  .revcount:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
-  .revcount.has{background:var(--orange);border-color:var(--orange);color:#fff}
-  .revcount .minus{
-    position:absolute;font-size:0;
+  .stepper button:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+  .stepper.has button{background:var(--orange);color:#fff}
+  .stepper button:active{filter:brightness(.92)}
+  .stepper .rc-num{
+    min-width:22px;height:21px;padding:0 2px;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;
+    color:var(--ink-soft);display:flex;align-items:center;justify-content:center;
   }
-  .revhint{
-    font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--ink-soft);
-    text-align:center;line-height:1;margin-top:2px;letter-spacing:.02em;
-  }
+  .stepper.has .rc-num{color:var(--orange)}
   .empty-msg{
     padding:14px 16px;font-family:'IBM Plex Mono',monospace;font-size:12px;
     color:var(--ink-soft);
@@ -258,7 +262,8 @@
   }
   @media (max-width:560px){
     .topic .txt{font-size:13.5px}
-    .ckwrap,.col-head span{width:48px}
+    .ckwrap,.col-head span{width:44px}
+    .ckwrap.wrev,.col-head span.wrev{width:76px}
     .mini-bars{display:none}
   }
   @media (prefers-reduced-motion:reduce){
@@ -315,7 +320,7 @@
   <button class="ghost" id="collapseAll">recolher tudo</button>
   <button class="ghost" id="resetBtn">zerar progresso</button>
 </div>
-<div class="savenote">No contador de revisões: clique para <b>+1</b>; clique com o botão direito (ou Alt+clique) para <b>−1</b>.</div>
+<div class="savenote">Em <b>Revisões</b>, use os botões <b>+</b> e <b>−</b> para registrar cada revisão do tópico.</div>
 <div class="savenote" id="saveNote">Progresso salvo automaticamente.</div>
 
 <main id="main"></main>
@@ -633,7 +638,11 @@ function build(){
           <span class="num">${t[0]}</span>
           <span class="txt">${label}</span>
           <span class="ckwrap"><input type="checkbox" class="ck est" data-key="${k}" data-kind="e" aria-label="Estudado: ${label}"></span>
-          <span class="ckwrap"><button type="button" class="revcount" data-key="${k}" aria-label="Revisões: ${label}">0</button></span>
+          <span class="ckwrap wrev"><span class="stepper" data-key="${k}">
+            <button type="button" class="rstep-minus" aria-label="Diminuir revisões: ${label}">−</button>
+            <span class="rc-num">0</span>
+            <button type="button" class="rstep-plus" aria-label="Aumentar revisões: ${label}">+</button>
+          </span></span>
         </div>`;
       }).join("");
 
@@ -648,7 +657,7 @@ function build(){
           <span class="caret" aria-hidden="true"></span>
         </button>
         <div class="topics">
-          <div class="col-head"><span style="width:38px"></span><span class="spacer"></span><span>Estudei</span><span>Revisões</span></div>
+          <div class="col-head"><span style="width:38px"></span><span class="spacer"></span><span>Estudei</span><span class="wrev">Revisões</span></div>
           ${rows}
           <div class="empty-msg" hidden>Nenhum tópico neste filtro. 👊</div>
         </div>`;
@@ -679,10 +688,10 @@ function refresh(){
       const st = state[k] || {};
       const rc = st.r || 0;
       const ckE = row.querySelector(".ck.est");
-      const btnR = row.querySelector(".revcount");
+      const stp = row.querySelector(".stepper");
       ckE.checked = !!st.e;
-      btnR.textContent = rc;
-      btnR.classList.toggle("has", rc>0);
+      stp.querySelector(".rc-num").textContent = rc;
+      stp.classList.toggle("has", rc>0);
       row.classList.toggle("done-both", !!st.e && rc>0);
       let show = true;
       if(filter==="pending") show = !st.e;
@@ -732,24 +741,20 @@ function wire(){
     saveState();
     refresh();
   });
-  // contador de revisões: clique soma, botão direito / com Alt subtrai
+  // stepper de revisões: botões − e +
   document.getElementById("main").addEventListener("click", ev=>{
-    const btn = ev.target.closest(".revcount");
-    if(!btn) return;
-    bump(btn.dataset.key, ev.altKey ? -1 : 1);
+    const minus = ev.target.closest(".rstep-minus");
+    const plus  = ev.target.closest(".rstep-plus");
+    if(!minus && !plus) return;
+    const key = ev.target.closest(".stepper").dataset.key;
+    bump(key, plus ? 1 : -1);
   });
-  document.getElementById("main").addEventListener("contextmenu", ev=>{
-    const btn = ev.target.closest(".revcount");
-    if(!btn) return;
-    ev.preventDefault();
-    bump(btn.dataset.key, -1);
-  });
-  // acessibilidade: setas ajustam o contador
+  // acessibilidade: setas ajustam quando foco está no stepper
   document.getElementById("main").addEventListener("keydown", ev=>{
-    const btn = ev.target.closest(".revcount");
-    if(!btn) return;
-    if(ev.key==="ArrowUp" || ev.key==="+"){ ev.preventDefault(); bump(btn.dataset.key, 1); }
-    if(ev.key==="ArrowDown" || ev.key==="-"){ ev.preventDefault(); bump(btn.dataset.key, -1); }
+    const stp = ev.target.closest(".stepper");
+    if(!stp) return;
+    if(ev.key==="ArrowUp" || ev.key==="+"){ ev.preventDefault(); bump(stp.dataset.key, 1); }
+    if(ev.key==="ArrowDown" || ev.key==="-"){ ev.preventDefault(); bump(stp.dataset.key, -1); }
   });
   document.getElementById("main").addEventListener("click", ev=>{
     const head = ev.target.closest(".subj-head");
