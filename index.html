@@ -123,10 +123,221 @@
   }
   .chip.active{background:var(--navy);color:#fff}
   .controls .spacer{flex:1}
-  .ghost{
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
-    background:none;border:none;color:var(--ink-soft);cursor:pointer;
-    text-decoration:underline;text-underline-offset:3px;
+  .btn-action, .btn-reset {
+    font-family:'Barlow',sans-serif;font-weight:600;font-size:13.5px;
+    padding:8px 18px;border-radius:6px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .btn-action {
+    background:var(--navy);
+    color:#fff;
+    border:1.5px solid var(--navy);
+  }
+  .btn-action:hover {
+    background:var(--navy-deep);
+    border-color:var(--navy-deep);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .btn-reset {
+    background:#fff;
+    border:1.5px solid var(--orange);
+    color:var(--orange);
+  }
+  .btn-reset:hover {
+    background:var(--orange);
+    color:#fff;
+    box-shadow: 0 4px 8px rgba(232,93,4,0.2);
+  }
+  .controls .spacer {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .controls .spacer {
+      display: block;
+    }
+  }
+
+  /* ---------- Sincronização ---------- */
+  .sync-panel {
+    max-width:960px;margin:18px auto 0;padding:16px 18px;
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:6px;
+  }
+  .sync-header {
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;
+    flex-wrap:wrap;gap:8px;
+  }
+  .sync-title {
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;
+    text-transform:uppercase;color:var(--navy);
+    display:flex;align-items:center;gap:6px;
+  }
+  .sync-status {
+    font-family:'IBM Plex Mono',monospace;font-size:11px;
+    padding:3px 8px;border-radius:4px;
+    background:#FFF8E7;color:#B27A00;
+    transition: all 0.3s ease;
+  }
+  .sync-status.synced {
+    background:#EBFDF2;color:#155724;
+  }
+  .sync-desc {
+    font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;
+    line-height:1.4;
+  }
+  .sync-controls {
+    display:flex;flex-wrap:wrap;gap:16px;
+    align-items:center;
+  }
+  .code-box, .actions-box {
+    display:flex;align-items:center;gap:8px;
+    flex:1 1 300px;
+  }
+  .code-label {
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .code-input {
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;
+    background:#FAF8F2;border:1.5px solid var(--line);color:var(--navy);
+    padding:6px 12px;border-radius:4px;width:100%;max-width:320px;
+    text-align:center;
+  }
+  .code-input-edit {
+    font-family:'Barlow',sans-serif;font-size:13px;
+    background:#fff;border:1.5px solid var(--navy-line);color:var(--ink);
+    padding:6px 12px;border-radius:4px;width:100%;max-width:240px;
+  }
+  .code-input-edit:focus {
+    outline:2px solid var(--gold);
+  }
+  .btn-sync-sec, .btn-sync-primary {
+    font-family:'Barlow',sans-serif;font-weight:600;font-size:13px;
+    padding:7px 14px;border-radius:4px;cursor:pointer;
+    transition: all 0.2s ease;
+    white-space:nowrap;
+  }
+  .btn-sync-sec {
+    background:#FAF8F2;color:var(--navy);
+    border:1.5px solid var(--line);
+  }
+  .btn-sync-sec:hover {
+    background:#EBE7DC;
+  }
+  .btn-sync-primary {
+    background:var(--navy);color:#fff;
+    border:1.5px solid var(--navy);
+  }
+  .btn-sync-primary:hover {
+    background:var(--navy-deep);border-color:var(--navy-deep);
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(18, 33, 64, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-card {
+    background: var(--card);
+    border-radius: 12px;
+    border: 1.5px solid var(--line);
+    padding: 24px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .modal-text {
+    font-size: 14.5px;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.45;
+  }
+  .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .modal-actions button {
+    font-family: 'Barlow', sans-serif;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+    border: 1.5px solid var(--line);
+    background: #fff;
+  }
+  .modal-actions button strong {
+    font-size: 14.0px;
+    color: var(--ink);
+  }
+  .modal-actions button span {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  
+  .btn-modal-primary {
+    background: #EBFDF2 !important;
+    border-color: #28a745 !important;
+  }
+  .btn-modal-primary strong {
+    color: #155724 !important;
+  }
+  .btn-modal-primary:hover {
+    background: #d4edda !important;
+  }
+  
+  .btn-modal-sec {
+    background: #FAF8F2 !important;
+  }
+  .btn-modal-sec:hover {
+    background: #EBE7DC !important;
+  }
+  
+  .btn-modal-cancel {
+    background: transparent !important;
+    align-items: center !important;
+    justify-content: center;
+    border-color: transparent !important;
+  }
+  .btn-modal-cancel strong {
+    color: var(--orange) !important;
+    font-weight: 600;
+  }
+  .btn-modal-cancel:hover {
+    background: rgba(232, 93, 4, 0.05) !important;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
   .savenote{
     max-width:960px;margin:0 auto;padding:0 20px 4px;
@@ -311,15 +522,49 @@
   </div>
 </div>
 
-<div class="controls">
-  <button class="chip active" data-filter="all">Todos</button>
-  <button class="chip" data-filter="pending">Não estudados</button>
-  <button class="chip" data-filter="toreview">Estudados sem revisão</button>
-  <span class="spacer"></span>
-  <button class="ghost" id="expandAll">expandir tudo</button>
-  <button class="ghost" id="collapseAll">recolher tudo</button>
-  <button class="ghost" id="resetBtn">zerar progresso</button>
+<!-- Painel de Sincronização -->
+<div class="sync-panel">
+  <div class="sync-header">
+    <span class="sync-title">🔄 Sincronização em Nuvem</span>
+    <span class="sync-status" id="syncStatus">Carregando...</span>
+  </div>
+  <div class="sync-body">
+    <p class="sync-desc">Guarde o código abaixo para acessar seu progresso de outros aparelhos, ou digite seu e-mail/código personalizado para carregar e sincronizar seus dados.</p>
+    <div class="sync-controls">
+      <div class="code-box">
+        <span class="code-label">Código Atual:</span>
+        <input type="text" id="syncCodeInput" class="code-input" readonly>
+        <button type="button" class="btn-sync-sec" id="copyCodeBtn" title="Copiar código">Copiar</button>
+      </div>
+      <div class="actions-box">
+        <input type="text" id="loadCodeInput" class="code-input-edit" placeholder="E-mail ou código personalizado">
+        <button type="button" class="btn-sync-primary" id="loadCodeBtn">Sincronizar</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="controls">
+    <button class="chip active" onclick="setFilter('all')">Todos</button>
+    <button class="chip" onclick="setFilter('not-started')">Não Iniciados</button>
+    <button class="chip" onclick="setFilter('in-progress')">Em Progresso</button>
+    <button class="chip" onclick="setFilter('done')">Concluídos</button>
+    <div class="spacer"></div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn-action" onclick="toggleAll(true)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+        Expandir Tudo
+      </button>
+      <button class="btn-action" onclick="toggleAll(false)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 15l7-7 7 7"/></svg>
+        Recolher Tudo
+      </button>
+      <button class="btn-reset" onclick="confirmReset()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        Zerar Progresso
+      </button>
+    </div>
+  </div>
 <div class="savenote">Em <b>Revisões</b>, use os botões <b>+</b> e <b>−</b> para registrar cada revisão do tópico.</div>
 <div class="savenote" id="saveNote">Progresso salvo automaticamente.</div>
 
@@ -328,6 +573,32 @@
 <footer>
   Fonte: Edital nº 1 – TCE/MA, de 6/7/2026 (Diário Oficial Eletrônico TCE/MA nº 3045/2026, item 14 — objetos de avaliação do Cargo 13). Cronograma sujeito a alteração por edital.
 </footer>
+
+<!-- Modal de Sincronização -->
+<div id="syncModal" class="modal-overlay" style="display: none;">
+  <div class="modal-card">
+    <h3 class="modal-title">🔄 Conflito de Sincronização</h3>
+    <p class="modal-text">Foram encontrados dados salvos na nuvem para o código <strong id="modalCodeSpan"></strong>, mas você já possui progresso registrado neste aparelho.</p>
+    <p class="modal-text">Para evitar a perda de dados, escolha a ação desejada:</p>
+    <div class="modal-actions">
+      <button type="button" class="btn-modal-primary" id="btnMergeSync">
+        <strong>Mesclar Dados (Recomendado)</strong>
+        <span>Combina o progresso do aparelho com o da nuvem</span>
+      </button>
+      <button type="button" class="btn-modal-sec" id="btnLoadSync">
+        <strong>Substituir Local</strong>
+        <span>Usa apenas os dados da nuvem (descarta o progresso atual deste aparelho)</span>
+      </button>
+      <button type="button" class="btn-modal-sec" id="btnOverwriteSync">
+        <strong>Sobrescrever Nuvem</strong>
+        <span>Envia os dados deste aparelho para a nuvem (descarta o progresso que estava lá)</span>
+      </button>
+      <button type="button" class="btn-modal-cancel" id="btnCancelSync">
+        <strong>Cancelar</strong>
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
 const SECTIONS = [
@@ -594,6 +865,73 @@ async function loadState(){
   try{ const v = localStorage.getItem(LS_DATA); if(v) state = JSON.parse(v)||{}; }catch(e){}
 }
 
+function updateSyncUI(){
+  const uid = getUserId();
+  const input = document.getElementById("syncCodeInput");
+  if(input) input.value = uid;
+
+  const status = document.getElementById("syncStatus");
+  if(status){
+    const isCustom = !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uid);
+    if(isCustom){
+      status.textContent = "Sincronizado: " + uid;
+      status.classList.add("synced");
+    } else {
+      status.textContent = "Conectado localmente (Sem código)";
+      status.classList.remove("synced");
+    }
+  }
+}
+
+function mergeStates(local, remote) {
+  const merged = { ...local };
+  for (const key in remote) {
+    if (remote.hasOwnProperty(key)) {
+      if (!merged[key]) {
+        merged[key] = { ...remote[key] };
+      } else {
+        merged[key].e = (merged[key].e || remote[key].e) ? 1 : 0;
+        merged[key].r = Math.max(merged[key].r || 0, remote[key].r || 0);
+      }
+    }
+  }
+  return merged;
+}
+
+function showSyncConflictModal(newCode, localData, remoteData, onResolve) {
+  const modal = document.getElementById("syncModal");
+  document.getElementById("modalCodeSpan").textContent = newCode;
+  modal.style.display = "flex";
+
+  const cleanup = () => {
+    modal.style.display = "none";
+    document.getElementById("btnMergeSync").onclick = null;
+    document.getElementById("btnLoadSync").onclick = null;
+    document.getElementById("btnOverwriteSync").onclick = null;
+    document.getElementById("btnCancelSync").onclick = null;
+  };
+
+  document.getElementById("btnMergeSync").onclick = () => {
+    cleanup();
+    onResolve("merge");
+  };
+
+  document.getElementById("btnLoadSync").onclick = () => {
+    cleanup();
+    onResolve("load");
+  };
+
+  document.getElementById("btnOverwriteSync").onclick = () => {
+    cleanup();
+    onResolve("overwrite");
+  };
+
+  document.getElementById("btnCancelSync").onclick = () => {
+    cleanup();
+    onResolve("cancel");
+  };
+}
+
 let saveTimer = null;
 function saveState(){
   clearTimeout(saveTimer);
@@ -767,38 +1105,176 @@ function wire(){
     ch.addEventListener("click", ()=>{
       document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
       ch.classList.add("active");
-      filter = ch.dataset.filter;
-      if(filter!=="all"){
-        document.querySelectorAll("section.subject").forEach(s=>s.classList.add("open"));
-      }
-      refresh();
     });
   });
-  document.getElementById("expandAll").addEventListener("click", ()=>{
-    document.querySelectorAll("section.subject").forEach(s=>s.classList.add("open"));
-  });
-  document.getElementById("collapseAll").addEventListener("click", ()=>{
-    document.querySelectorAll("section.subject").forEach(s=>s.classList.remove("open"));
-  });
-  document.getElementById("resetBtn").addEventListener("click", async ()=>{
-    if(!confirm("Zerar todo o progresso de estudo e revisão?")) return;
-    state = {};
+
+  // Copiar código
+  document.getElementById("copyCodeBtn").addEventListener("click", ()=>{
     const uid = getUserId();
-    try{ localStorage.removeItem(LS_DATA); }catch(e){}
-    try{ await supaDel(uid); }catch(e){}
-    refresh();
-    setNote("Progresso zerado.");
+    navigator.clipboard.writeText(uid).then(()=>{
+      const btn = document.getElementById("copyCodeBtn");
+      const oldTxt = btn.textContent;
+      btn.textContent = "Copiado!";
+      setTimeout(()=>btn.textContent = oldTxt, 2000);
+    }).catch(err=>{
+      alert("Seu código de acesso é: " + uid);
+    });
   });
+
+  // Sincronizar com outro código
+  document.getElementById("loadCodeBtn").addEventListener("click", async ()=>{
+    const input = document.getElementById("loadCodeInput");
+    const newCode = input.value.trim();
+    if(!newCode){
+      alert("Por favor, digite um código ou e-mail válido para sincronizar.");
+      return;
+    }
+
+    const currentCode = getUserId();
+    if(newCode === currentCode){
+      alert("Você já está conectado usando este código.");
+      return;
+    }
+
+    const btn = document.getElementById("loadCodeBtn");
+    btn.disabled = true;
+    btn.textContent = "Buscando...";
+
+    try {
+      const remoteData = await supaGet(newCode);
+      const hasLocalData = Object.keys(state).length > 0;
+
+      if(remoteData){
+        if(!hasLocalData) {
+          localStorage.setItem(LS_UID, newCode);
+          state = remoteData;
+          localStorage.setItem(LS_DATA, JSON.stringify(state));
+          refresh();
+          updateSyncUI();
+          input.value = "";
+          alert("Progresso carregado e sincronizado com sucesso!");
+        } else {
+          // Conflict: both have data. Show custom modal.
+          showSyncConflictModal(newCode, state, remoteData, async (choice) => {
+            if(choice === "cancel") return;
+            
+            btn.disabled = true;
+            btn.textContent = "Sincronizando...";
+            try {
+              if (choice === "merge") {
+                const merged = mergeStates(state, remoteData);
+                localStorage.setItem(LS_UID, newCode);
+                state = merged;
+                localStorage.setItem(LS_DATA, JSON.stringify(state));
+                await supaSet(newCode, state);
+                refresh();
+                updateSyncUI();
+                input.value = "";
+                alert("Dados mesclados e sincronizados com sucesso!");
+              } else if (choice === "load") {
+                localStorage.setItem(LS_UID, newCode);
+                state = remoteData;
+                localStorage.setItem(LS_DATA, JSON.stringify(state));
+                refresh();
+                updateSyncUI();
+                input.value = "";
+                alert("Dados locais substituídos pelo progresso da nuvem!");
+              } else if (choice === "overwrite") {
+                localStorage.setItem(LS_UID, newCode);
+                await supaSet(newCode, state);
+                updateSyncUI();
+                input.value = "";
+                alert("Progresso deste dispositivo salvo na nuvem!");
+              }
+            } catch(err) {
+              console.error(err);
+              alert("Erro ao aplicar sincronização.");
+            } finally {
+              btn.disabled = false;
+              btn.textContent = "Sincronizar";
+            }
+          });
+        }
+      } else {
+        const confirmUpload = confirm(`Nenhum progresso foi encontrado na nuvem para o código "${newCode}".\n\nDeseja criar um novo perfil e enviar o progresso atual deste dispositivo para o código "${newCode}"?`);
+        if(confirmUpload){
+          localStorage.setItem(LS_UID, newCode);
+          await supaSet(newCode, state);
+          updateSyncUI();
+          input.value = "";
+          alert(`Progresso sincronizado com o novo código "${newCode}"!`);
+        }
+      }
+    } catch(e) {
+      console.error(e);
+      alert("Erro ao conectar com o servidor. Por favor, verifique sua conexão com a internet.");
+    } finally {
+      const modal = document.getElementById("syncModal");
+      if(modal.style.display !== "flex") {
+        btn.disabled = false;
+        btn.textContent = "Sincronizar";
+      }
+    }
+  });
+
   // contagem regressiva
   const days = Math.max(0, Math.ceil((PROVA - new Date())/(1000*60*60*24)));
   document.getElementById("days").textContent = days;
 }
+
+window.toggleAll = function(expand) {
+  document.querySelectorAll("section.subject").forEach(s => {
+    if(expand) s.classList.add("open");
+    else s.classList.remove("open");
+  });
+};
+
+window.setFilter = function(f) {
+  filter = f;
+  if(filter !== "all") {
+    document.querySelectorAll("section.subject").forEach(s => s.classList.add("open"));
+  }
+  refresh();
+};
+
+window.confirmReset = async function() {
+  const modalHTML = `
+    <div id="resetModal" class="modal-overlay" style="display:flex;">
+      <div class="modal-card">
+        <h3 class="modal-title" style="color:var(--orange);">⚠️ ATENÇÃO: Ação Irreversível</h3>
+        <p class="modal-text">Todos os seus dados de progresso de estudo e contagem de revisões serão <strong>APAGADOS PERMANENTEMENTE</strong> deste dispositivo e da nuvem.</p>
+        <p class="modal-text">Você tem certeza que deseja zerar tudo?</p>
+        <div class="modal-actions">
+          <button type="button" class="btn-modal-sec" style="background:#FFEBE5 !important; border-color:var(--orange) !important;" onclick="performReset()">
+            <strong style="color:var(--orange) !important;">Sim, Zerar Progresso</strong>
+          </button>
+          <button type="button" class="btn-modal-cancel" onclick="document.getElementById('resetModal').remove()">
+            <strong>Cancelar</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+};
+
+window.performReset = async function() {
+  document.getElementById('resetModal').remove();
+  state = {};
+  const uid = getUserId();
+  try{ localStorage.removeItem(LS_DATA); }catch(e){}
+  try{ await supaDel(uid); }catch(e){}
+  refresh();
+  updateSyncUI();
+  setNote("Progresso zerado.");
+};
 
 (async function init(){
   build();
   await loadState();
   wire();
   refresh();
+  updateSyncUI();
 })();
 </script>
 </body>
