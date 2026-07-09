@@ -67,6 +67,9 @@
     font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     transition: all 0.2s ease;
   }
   .btn-resumo:hover {
@@ -623,7 +626,7 @@
 
 <div class="lead-overlay" id="leadOverlay">
   <div class="lead-content">
-    <h1 class="lead-title">Edital Verticalizado<br>INTERATIVO do TCE-MA<br>Cargo 13: Auditor Engenharia</h1>
+    <h1 class="lead-title">Edital Verticalizado<br><span style="color: #E3342F;">INTERATIVO</span> do TCE-MA<br>Cargo 13: Auditor Engenharia</h1>
     <p class="lead-subtitle">178 tópicos clicáveis · marca estudo e conta revisões · progresso salvo automaticamente · contagem regressiva até 29/11 · grátis</p>
     
     <div class="lead-form-box">
@@ -655,7 +658,10 @@
     <div class="eyebrow">Edital nº 1 – TCE/MA · 6/7/2026 · Cebraspe</div>
     <h1>Edital Verticalizado<br><span class="sub">Auditor de Controle Externo — Engenharia</span></h1>
     <div class="brand">CARGO 13 · TCE/MA 2026 · @concurseironalabuta_</div>
-    <button class="btn-resumo" onclick="toggleResumo()">Resumo do Edital</button>
+    <button class="btn-resumo" onclick="toggleResumo()">
+      Resumo do Edital
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
 
     <div class="titleblock" id="resumoTabela" role="table" aria-label="Dados do cargo" style="display:none;">
       <div class="tb-cell"><div class="k">Remuneração</div><div class="v gold">R$ 20.112,20</div></div>
