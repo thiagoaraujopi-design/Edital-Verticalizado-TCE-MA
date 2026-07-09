@@ -142,12 +142,16 @@
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-label">Total de Cadastros</div>
+      <div class="stat-label">Total de Acessos Únicos</div>
+      <div class="stat-value" id="totalViews">-</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total de Cadastros (Leads)</div>
       <div class="stat-value" id="totalLeads">-</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Cadastros nas últimas 24h</div>
-      <div class="stat-value" id="recentLeads">-</div>
+      <div class="stat-label">Taxa de Conversão</div>
+      <div class="stat-value" id="conversionRate" style="color: var(--green);">-</div>
     </div>
   </div>
   
@@ -182,6 +186,7 @@ const SUPA_URL  = "https://fkwrmffxxjzulfybvlsb.supabase.co";
 const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrd3JtZmZ4eGp6dWxmeWJ2bHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1MzY1NjMsImV4cCI6MjA5OTExMjU2M30.Plx5Ujso683Sjn-lD78M5OtT7xzuI7FTa6_THNl3WuM";
 
 let leadsData = [];
+let pageviewsData = [];
 
 async function fetchLeads() {
   try {
@@ -196,8 +201,18 @@ async function fetchLeads() {
       throw new Error(`Erro ${res.status}`);
     }
     
-    const data = await res.json();
-    leadsData = data;
+    leadsData = await res.json();
+
+    const resViews = await fetch(`${SUPA_URL}/rest/v1/pageviews?select=*`, {
+      headers: {
+        'apikey': SUPA_ANON,
+        'Authorization': 'Bearer ' + SUPA_ANON
+      }
+    });
+    if (resViews.ok) {
+      pageviewsData = await resViews.json();
+    }
+
     renderData();
   } catch(err) {
     console.error(err);
@@ -208,11 +223,14 @@ async function fetchLeads() {
 
 function renderData() {
   document.getElementById('totalLeads').textContent = leadsData.length;
+  document.getElementById('totalViews').textContent = pageviewsData.length;
   
-  const now = new Date();
-  const oneDay = 24 * 60 * 60 * 1000;
-  const recent = leadsData.filter(L => (now - new Date(L.created_at)) < oneDay).length;
-  document.getElementById('recentLeads').textContent = recent;
+  if (pageviewsData.length > 0) {
+    const rate = ((leadsData.length / pageviewsData.length) * 100).toFixed(1);
+    document.getElementById('conversionRate').textContent = rate + '%';
+  } else {
+    document.getElementById('conversionRate').textContent = '0%';
+  }
   
   const tbody = document.getElementById('tableBody');
   if (leadsData.length === 0) {

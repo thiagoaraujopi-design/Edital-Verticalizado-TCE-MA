@@ -76,6 +76,48 @@
     background: var(--gold);
     color: var(--navy);
   }
+  .btn-como-usar {
+    margin-top: 15px;
+    margin-left: 10px;
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+  }
+  .btn-como-usar:hover {
+    background: var(--green);
+    color: #fff;
+  }
+  .como-usar-block {
+    margin-top: 20px;
+    background: rgba(30, 138, 90, 0.15);
+    border-left: 4px solid var(--green);
+    padding: 16px 20px;
+    border-radius: 0 4px 4px 0;
+  }
+  .como-usar-block h3 {
+    color: var(--green);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .como-usar-block p {
+    font-size: 14.5px;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .como-usar-block p:last-child { margin-bottom: 0; }
   /* legenda de prancha (title block) */
   .titleblock{
     margin-top:20px;
@@ -662,6 +704,16 @@
       Resumo do Edital
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
     </button>
+    <button class="btn-como-usar" onclick="toggleComoUsar()">
+      Como Usar
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+
+    <div class="como-usar-block" id="comoUsarBlock" style="display:none;">
+      <h3>Como acessar fácil depois:</h3>
+      <p>1. Se abriu o link no Instagram, vá no menu de opções do topo e selecione <strong>"Abrir no navegador do sistema"</strong> (Chrome/Safari).</p>
+      <p>2. Para não precisar voltar na bio toda vez, salve o app: vá no menu do navegador e escolha <strong>"Adicionar à Tela Inicial"</strong> no celular (ou salve nos Favoritos no PC).</p>
+    </div>
 
     <div class="titleblock" id="resumoTabela" role="table" aria-label="Dados do cargo" style="display:none;">
       <div class="tb-cell"><div class="k">Remuneração</div><div class="v gold">R$ 20.112,20</div></div>
@@ -1493,8 +1545,36 @@ function checkLeadStatus() {
   } catch(err) {}
 }
 
+window.toggleComoUsar = function() {
+  const block = document.getElementById('comoUsarBlock');
+  if (block.style.display === 'none' || block.style.display === '') {
+    block.style.display = 'block';
+  } else {
+    block.style.display = 'none';
+  }
+};
+
+function logPageView() {
+  try {
+    const hasVisited = localStorage.getItem('hasVisited');
+    if (!hasVisited) {
+      localStorage.setItem('hasVisited', 'true');
+      fetch(`${SUPA_URL}/rest/v1/pageviews`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPA_ANON,
+          'Authorization': 'Bearer ' + SUPA_ANON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ created_at: new Date().toISOString() })
+      }).catch(err => console.warn("Erro ao salvar view", err));
+    }
+  } catch(err) {}
+}
+
 (async function init(){
   checkLeadStatus();
+  logPageView();
   build();
   await loadState();
   wire();
