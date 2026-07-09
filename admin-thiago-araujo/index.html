@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard de Leads — Edital Verticalizado</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root {
     --navy: #1A2E52;
@@ -123,6 +123,41 @@
   }
   .error-box h3 { color: var(--orange); font-size: 16px; margin-bottom: 6px; font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase;}
   .error-box p { font-size: 14px; color: var(--ink); line-height: 1.5; }
+
+  .chart-container {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .chart-header h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; text-transform: uppercase; color: var(--navy); }
+  .chart-select {
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: #FAFAFA;
+    cursor: pointer;
+    outline: none;
+  }
+  .chart-select:focus { border-color: var(--orange); }
+  .chart-body {
+    position: relative;
+    height: 300px;
+    width: 100%;
+  }
 </style>
 </head>
 <body>
@@ -152,6 +187,21 @@
     <div class="stat-card">
       <div class="stat-label">Taxa de Conversão</div>
       <div class="stat-value" id="conversionRate" style="color: var(--green);">-</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-header">
+      <h2>Pico de Acessos (Horários)</h2>
+      <select id="chartFilter" class="chart-select" onchange="updateChart()">
+        <option value="all">Todo o Período</option>
+        <option value="today">Hoje</option>
+        <option value="7days">Últimos 7 dias</option>
+        <option value="30days">Este Mês (30 dias)</option>
+      </select>
+    </div>
+    <div class="chart-body">
+      <canvas id="peakChart"></canvas>
     </div>
   </div>
   
@@ -214,6 +264,7 @@ async function fetchLeads() {
     }
 
     renderData();
+    renderChart();
   } catch(err) {
     console.error(err);
     document.getElementById('errorBox').style.display = 'block';
@@ -280,6 +331,86 @@ function exportCSV() {
   link.click();
   document.body.removeChild(link);
 }
+
+let peakChartInstance = null;
+
+function processChartData(period) {
+  const now = new Date();
+  let filteredData = pageviewsData;
+
+  if (period !== 'all') {
+    filteredData = pageviewsData.filter(v => {
+      const vDate = new Date(v.created_at);
+      const diffTime = Math.abs(now - vDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      
+      if (period === 'today') return diffDays <= 1 && vDate.getDate() === now.getDate();
+      if (period === '7days') return diffDays <= 7;
+      if (period === '30days') return diffDays <= 30;
+      return true;
+    });
+  }
+
+  const hourlyData = Array(24).fill(0);
+  filteredData.forEach(v => {
+    const hour = new Date(v.created_at).getHours();
+    hourlyData[hour]++;
+  });
+
+  return hourlyData;
+}
+
+function renderChart() {
+  const period = document.getElementById('chartFilter').value;
+  const data = processChartData(period);
+  const labels = Array.from({length: 24}, (_, i) => `${i.toString().padStart(2, '0')}h`);
+
+  if (peakChartInstance) {
+    peakChartInstance.data.datasets[0].data = data;
+    peakChartInstance.update();
+  } else {
+    const ctx = document.getElementById('peakChart').getContext('2d');
+    peakChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Acessos',
+          data: data,
+          borderColor: '#E85D04',
+          backgroundColor: 'rgba(232, 93, 4, 0.1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.3,
+          pointBackgroundColor: '#1A2E52',
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (ctx) => `Horário: ${ctx[0].label}`,
+              label: (ctx) => `${ctx.raw} acessos`
+            }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+}
+
+window.updateChart = function() {
+  renderChart();
+};
 
 fetchLeads();
 </script>
