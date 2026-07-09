@@ -494,9 +494,161 @@
   @media (prefers-reduced-motion:reduce){
     .bar>i,.caret{transition:none}
   }
+  /* ---------- Lead Capture Overlay ---------- */
+  .lead-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--navy);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .lead-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .lead-content {
+    width: 100%;
+    max-width: 660px;
+    text-align: center;
+  }
+  .lead-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 48px);
+    line-height: 1.15;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .lead-subtitle {
+    font-family: 'Barlow', sans-serif;
+    font-size: clamp(16px, 3vw, 20px);
+    color: #fff;
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+  .lead-form-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .lead-inputs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .lead-inputs > div {
+    flex: 1;
+    position: relative;
+  }
+  .lead-input {
+    width: 100%;
+    background: #F7F7F7;
+    border: 1px solid #E0E0E0;
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .lead-input::placeholder {
+    color: #888;
+  }
+  .lead-input:focus {
+    outline: 2px solid var(--gold);
+    background: #fff;
+  }
+  .lead-badge {
+    position: absolute;
+    bottom: -8px;
+    left: 14px;
+    background: #666;
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .lead-optin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 500;
+    font-family: 'Barlow', sans-serif;
+    cursor: pointer;
+  }
+  .lead-optin input[type="checkbox"] {
+    accent-color: var(--gold);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  .lead-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy-deep);
+    border: none;
+    padding: 16px;
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .lead-btn:hover {
+    background: #d89010;
+  }
+  @media (max-width: 560px) {
+    .lead-inputs {
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+  }
 </style>
 </head>
 <body>
+
+<div class="lead-overlay" id="leadOverlay">
+  <div class="lead-content">
+    <h1 class="lead-title">Edital Verticalizado<br>INTERATIVO do TCE-MA<br>Cargo 13: Auditor Engenharia</h1>
+    <p class="lead-subtitle">178 tópicos clicáveis · marca estudo e conta revisões · progresso salvo automaticamente · contagem regressiva até 29/11 · grátis</p>
+    
+    <div class="lead-form-box">
+      <form id="leadForm" onsubmit="handleLeadSubmit(event)">
+        <div class="lead-inputs">
+          <div>
+            <input type="text" id="leadName" class="lead-input" placeholder="Nome" required>
+            <div class="lead-badge">NOME</div>
+          </div>
+          <div>
+            <input type="email" id="leadEmail" class="lead-input" placeholder="Email" required>
+            <div class="lead-badge">EMAIL</div>
+          </div>
+        </div>
+        
+        <label class="lead-optin">
+          <input type="checkbox" id="leadOptin" required>
+          Sim, concordo em receber seus emails
+        </label>
+        
+        <button type="submit" class="lead-btn">ACESSAR O EDITAL VERTICALIZADO</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="wrap">
@@ -1295,7 +1447,48 @@ window.performReset = async function() {
   setNote("Progresso zerado.");
 };
 
+// ---------- Lead Capture Logic ----------
+window.handleLeadSubmit = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('leadName').value;
+  const email = document.getElementById('leadEmail').value;
+  
+  if (name && email) {
+    try {
+      localStorage.setItem('leadCaptured', 'true');
+      
+      fetch(`${SUPA_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPA_ANON,
+          'Authorization': 'Bearer ' + SUPA_ANON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: name, email: email, created_at: new Date().toISOString() })
+      }).catch(err => console.warn("Supabase lead save failed", err));
+      
+    } catch(err) {}
+    
+    document.getElementById('leadOverlay').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('leadOverlay').style.display = 'none';
+    }, 400);
+  }
+};
+
+function checkLeadStatus() {
+  try {
+    const isCaptured = localStorage.getItem('leadCaptured');
+    if (isCaptured === 'true') {
+      const overlay = document.getElementById('leadOverlay');
+      overlay.classList.add('hidden');
+      overlay.style.display = 'none';
+    }
+  } catch(err) {}
+}
+
 (async function init(){
+  checkLeadStatus();
   build();
   await loadState();
   wire();
